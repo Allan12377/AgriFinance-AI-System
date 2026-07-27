@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>AgriFinance AI</title>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar" aria-label="Main navigation">
+        <div class="brand">
+          <span class="brand-mark">AF</span>
+          <div>
+            <strong>AgriFinance AI</strong>
+            <span>Farmer workspace</span>
+          </div>
+        </div>
+
+        <nav class="nav-list">
+          <a class="nav-item active" href="#dashboard">Dashboard</a>
+          <a class="nav-item" href="#records">Records</a>
+          <a class="nav-item muted" href="#loans" aria-disabled="true">Loans</a>
+          <a class="nav-item muted" href="#market" aria-disabled="true">Market</a>
+          <a class="nav-item muted" href="#weather" aria-disabled="true">Weather</a>
+        </nav>
+      </aside>
+
+      <main class="workspace">
+        <header class="topbar">
+          <div>
+            <p class="eyebrow">Phase 1</p>
+            <h1>Farm finance dashboard</h1>
+          </div>
+          <div class="topbar-actions">
+            <label class="field compact">
+              <span>Period</span>
+              <select id="periodFilter">
+                <option value="all">All records</option>
+                <option value="month">This month</option>
+              </select>
+            </label>
+            <button class="ghost-button" id="exportButton" type="button">Export CSV</button>
+          </div>
+        </header>
+
+        <section class="metrics-grid" aria-label="Financial summary">
+          <article class="metric">
+            <span>Total income</span>
+            <strong id="incomeTotal">UGX 0</strong>
+            <small id="incomeCount">0 income records</small>
+          </article>
+          <article class="metric">
+            <span>Total expenses</span>
+            <strong id="expenseTotal">UGX 0</strong>
+            <small id="expenseCount">0 expense records</small>
+          </article>
+          <article class="metric accent">
+            <span>Net profit</span>
+            <strong id="profitTotal">UGX 0</strong>
+            <small id="profitStatus">No records yet</small>
+          </article>
+          <article class="metric">
+            <span>Profit margin</span>
+            <strong id="profitMargin">0%</strong>
+            <small>Income kept after costs</small>
+          </article>
+        </section>
+
+        <div class="content-grid">
+          <section class="panel" id="records">
+            <div class="panel-header">
+              <div>
+                <p class="eyebrow">Records</p>
+                <h2>Add income or expense</h2>
+              </div>
+            </div>
+
+            <form class="record-form" id="recordForm">
+              <label class="field">
+                <span>Type</span>
+                <select id="recordType" required>
+                  <option value="income">Income</option>
+                  <option value="expense">Expense</option>
+                </select>
+              </label>
+              <label class="field">
+                <span>Date</span>
+                <input id="recordDate" type="date" required>
+              </label>
+              <label class="field">
+                <span>Crop or farm</span>
+                <input id="recordCrop" type="text" placeholder="Beans, maize, banana" required>
+              </label>
+              <label class="field">
+                <span>Category</span>
+                <select id="recordCategory" required></select>
+              </label>
+              <label class="field">
+                <span>Amount (UGX)</span>
+                <input id="recordAmount" type="number" min="1" step="1" placeholder="150000" required>
+              </label>
+              <label class="field note-field">
+                <span>Note</span>
+                <input id="recordNote" type="text" placeholder="Optional">
+              </label>
+              <p class="form-error" id="formError" role="alert"></p>
+              <button class="primary-button" type="submit">Add record</button>
+            </form>
+          </section>
+
+          <section class="panel" id="dashboard">
+            <div class="panel-header">
+              <div>
+                <p class="eyebrow">Advice</p>
+                <h2>Financial signals</h2>
+              </div>
+            </div>
+            <div class="advice-list" id="adviceList"></div>
+            <div class="chart-block">
+              <div class="panel-header slim">
+                <h3>Expense breakdown</h3>
+                <span id="largestExpenseLabel"></span>
+              </div>
+              <div class="bar-list" id="expenseBars"></div>
+            </div>
+          </section>
+        </div>
+
+        <section class="panel records-panel">
+          <div class="panel-header">
+            <div>
+              <p class="eyebrow">Ledger</p>
+              <h2>Recent farm records</h2>
+            </div>
+            <button class="text-button" id="resetButton" type="button">Reset demo</button>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Type</th>
+                  <th>Crop or farm</th>
+                  <th>Category</th>
+                  <th>Amount</th>
+                  <th>Note</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody id="recordsBody"></tbody>
+            </table>
+          </div>
+          <p class="empty-state" id="emptyState">No records for the selected period.</p>
+        </section>
+      </main>
+    </div>
+
+    <script src="app.js"></script>
+  </body>
+</html>

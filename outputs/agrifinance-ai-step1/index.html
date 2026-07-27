@@ -1,0 +1,726 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>AgriFinance AI - Premium Farmer Workspace</title>
+    <link rel="stylesheet" href="styles.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar" aria-label="Main navigation">
+        <div class="brand">
+          <div class="brand-logo">
+            <span class="brand-mark">AF</span>
+          </div>
+          <div>
+            <strong>AgriFinance AI</strong>
+            <span>Decision Support System</span>
+          </div>
+        </div>
+
+        <nav class="nav-list" id="navBar">
+          <a class="nav-item active" href="#dashboard">
+            <span class="nav-icon">📊</span> Dashboard
+          </a>
+          <a class="nav-item" href="#farms">
+            <span class="nav-icon">🌾</span> Farms & Profile
+          </a>
+          <a class="nav-item" href="#loans">
+            <span class="nav-icon">💰</span> Loans & Savings
+          </a>
+          <a class="nav-item" href="#market">
+            <span class="nav-icon">📈</span> Market & Weather
+          </a>
+          <a class="nav-item" href="#ai">
+            <span class="nav-icon">🤖</span> AI Insights
+          </a>
+          <a class="nav-item" href="#reports">
+            <span class="nav-icon">📋</span> Reports
+          </a>
+        </nav>
+
+        <div class="sidebar-footer">
+          <div class="profile-summary" id="sidebarProfile">
+            <div class="avatar">👤</div>
+            <div>
+              <strong id="sidebarName">Allan Ainebyona</strong>
+              <span id="sidebarDistrict">Kabale District</span>
+            </div>
+          </div>
+        </div>
+      </aside>
+
+      <main class="workspace">
+        <header class="topbar">
+          <div>
+            <p class="eyebrow" id="workspaceEyebrow">WORKSPACE</p>
+            <h1 id="pageTitle">Farm Finance Dashboard</h1>
+          </div>
+          <div class="topbar-actions" id="topbarActions">
+            <label class="field compact" id="periodFilterLabel">
+              <span>Period</span>
+              <select id="periodFilter">
+                <option value="all">All records</option>
+                <option value="month">This month</option>
+              </select>
+            </label>
+            <button class="ghost-button" id="exportButton" type="button">Export CSV</button>
+            <button class="text-button" id="resetButton" type="button">Reset demo</button>
+          </div>
+        </header>
+
+        <!-- VIEW 1: DASHBOARD -->
+        <div id="dashboardView" class="tab-view active">
+          <section class="metrics-grid" aria-label="Financial summary">
+            <article class="metric">
+              <div class="metric-hdr">
+                <span>Total income</span>
+                <span class="m-icon icon-inc">💰</span>
+              </div>
+              <strong id="incomeTotal">UGX 0</strong>
+              <small id="incomeCount">0 income records</small>
+            </article>
+            <article class="metric">
+              <div class="metric-hdr">
+                <span>Total expenses</span>
+                <span class="m-icon icon-exp">💸</span>
+              </div>
+              <strong id="expenseTotal">UGX 0</strong>
+              <small id="expenseCount">0 expense records</small>
+            </article>
+            <article class="metric accent">
+              <div class="metric-hdr">
+                <span>Net profit</span>
+                <span class="m-icon icon-prof">📈</span>
+              </div>
+              <strong id="profitTotal">UGX 0</strong>
+              <small id="profitStatus">No records yet</small>
+            </article>
+            <article class="metric">
+              <div class="metric-hdr">
+                <span>Profit margin</span>
+                <span class="m-icon icon-marg">🎯</span>
+              </div>
+              <strong id="profitMargin">0%</strong>
+              <small>Income kept after costs</small>
+            </article>
+          </section>
+
+          <div class="content-grid">
+            <section class="panel">
+              <div class="panel-header">
+                <div>
+                  <p class="eyebrow">Finance</p>
+                  <h2>Add record</h2>
+                </div>
+              </div>
+              <form class="record-form" id="recordForm">
+                <label class="field">
+                  <span>Type</span>
+                  <select id="recordType" required>
+                    <option value="income">Income</option>
+                    <option value="expense">Expense</option>
+                  </select>
+                </label>
+                <label class="field">
+                  <span>Date</span>
+                  <input id="recordDate" type="date" required>
+                </label>
+                <label class="field">
+                  <span>Farm Target</span>
+                  <select id="recordFarm" required>
+                    <option value="General">General / No Farm</option>
+                  </select>
+                </label>
+                <label class="field">
+                  <span>Category</span>
+                  <select id="recordCategory" required></select>
+                </label>
+                <label class="field">
+                  <span>Amount (UGX)</span>
+                  <input id="recordAmount" type="number" min="1" step="1" placeholder="150000" required>
+                </label>
+                <label class="field">
+                  <span>Note</span>
+                  <input id="recordNote" type="text" placeholder="Optional">
+                </label>
+                <p class="form-error" id="formError" role="alert"></p>
+                <button class="primary-button" type="submit">Add record</button>
+              </form>
+            </section>
+
+            <section class="panel">
+              <div class="panel-header">
+                <div>
+                  <p class="eyebrow">Advice</p>
+                  <h2>Financial signals</h2>
+                </div>
+              </div>
+              <div class="advice-list" id="adviceList"></div>
+              <div class="chart-block">
+                <div class="panel-header slim">
+                  <h3>Expense breakdown</h3>
+                  <span id="largestExpenseLabel"></span>
+                </div>
+                <div class="bar-list" id="expenseBars"></div>
+              </div>
+            </section>
+          </div>
+
+          <section class="panel records-panel">
+            <div class="panel-header">
+              <div>
+                <p class="eyebrow">Ledger</p>
+                <h2>Recent transactions</h2>
+              </div>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Date</th>
+                    <th>Type</th>
+                    <th>Farm</th>
+                    <th>Category</th>
+                    <th>Amount</th>
+                    <th>Note</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody id="recordsBody"></tbody>
+              </table>
+            </div>
+            <p class="empty-state" id="emptyState">No records for the selected period.</p>
+          </section>
+        </div>
+
+        <!-- VIEW 2: FARMS & PROFILE -->
+        <div id="farmsView" class="tab-view">
+          <div class="content-grid double-column">
+            <!-- Farmer Profile Card -->
+            <section class="panel">
+              <div class="panel-header">
+                <div>
+                  <p class="eyebrow">Profile</p>
+                  <h2>Farmer profile</h2>
+                </div>
+              </div>
+              <form id="profileForm" class="record-form">
+                <label class="field note-field">
+                  <span>Full Name</span>
+                  <input id="profName" type="text" value="Allan Ainebyona" required>
+                </label>
+                <label class="field">
+                  <span>Phone Number</span>
+                  <input id="profPhone" type="tel" value="+256 701 234567" required>
+                </label>
+                <label class="field">
+                  <span>Cooperative Name</span>
+                  <input id="profCoop" type="text" value="Kabale Growers Coop" placeholder="Optional">
+                </label>
+                <label class="field">
+                  <span>District</span>
+                  <select id="profDistrict">
+                    <option value="Kabale" selected>Kabale</option>
+                    <option value="Mbarara">Mbarara</option>
+                    <option value="Kasese">Kasese</option>
+                    <option value="Masaka">Masaka</option>
+                    <option value="Mbale">Mbale</option>
+                    <option value="Gulu">Gulu</option>
+                  </select>
+                </label>
+                <label class="field">
+                  <span>Village</span>
+                  <input id="profVillage" type="text" value="Kitumba" required>
+                </label>
+                <button class="primary-button" type="submit">Save Profile</button>
+              </form>
+            </section>
+
+            <!-- Farm Registration -->
+            <section class="panel">
+              <div class="panel-header">
+                <div>
+                  <p class="eyebrow">Farms</p>
+                  <h2>Register new farm</h2>
+                </div>
+              </div>
+              <form id="farmForm" class="record-form">
+                <label class="field">
+                  <span>Farm Name</span>
+                  <input id="farmName" type="text" placeholder="e.g. Hillside Maize Garden" required>
+                </label>
+                <label class="field">
+                  <span>Acreage (Acres)</span>
+                  <input id="farmAcreage" type="number" min="0.1" step="0.1" placeholder="2.5" required>
+                </label>
+                <label class="field">
+                  <span>Main Crop</span>
+                  <select id="farmCrop">
+                    <option value="Maize">Maize</option>
+                    <option value="Beans">Beans</option>
+                    <option value="Coffee">Coffee</option>
+                    <option value="Irish Potatoes">Irish Potatoes</option>
+                    <option value="Bananas">Bananas</option>
+                  </select>
+                </label>
+                <label class="field">
+                  <span>District Location</span>
+                  <select id="farmDistrict">
+                    <option value="Kabale" selected>Kabale</option>
+                    <option value="Mbarara">Mbarara</option>
+                    <option value="Kasese">Kasese</option>
+                    <option value="Masaka">Masaka</option>
+                    <option value="Mbale">Mbale</option>
+                    <option value="Gulu">Gulu</option>
+                  </select>
+                </label>
+                <button class="primary-button" type="submit">Register Farm</button>
+              </form>
+            </section>
+          </div>
+
+          <section class="panel records-panel">
+            <div class="panel-header">
+              <div>
+                <p class="eyebrow">Registered Lands</p>
+                <h2>Your Farms</h2>
+              </div>
+            </div>
+            <div class="grid-layout" id="farmsGrid"></div>
+          </section>
+        </div>
+
+        <!-- VIEW 3: LOANS & SAVINGS -->
+        <div id="loansView" class="tab-view">
+          <div class="metrics-grid" aria-label="Loans and Savings summary">
+            <article class="metric">
+              <div class="metric-hdr">
+                <span>Active debt principal</span>
+                <span class="m-icon icon-exp">💸</span>
+              </div>
+              <strong id="loansTotal">UGX 0</strong>
+              <small id="loansCount">0 active loans</small>
+            </article>
+            <article class="metric accent">
+              <div class="metric-hdr">
+                <span>Total payments made</span>
+                <span class="m-icon icon-prof">📈</span>
+              </div>
+              <strong id="loanRepaidTotal">UGX 0</strong>
+              <small>Repaid against principal</small>
+            </article>
+            <article class="metric">
+              <div class="metric-hdr">
+                <span>Total savings balance</span>
+                <span class="m-icon icon-inc">💰</span>
+              </div>
+              <strong id="savingsTotal">UGX 0</strong>
+              <small id="savingsCount">0 savings records</small>
+            </article>
+            <article class="metric">
+              <div class="metric-hdr">
+                <span>Debt-to-Savings ratio</span>
+                <span class="m-icon icon-marg">📊</span>
+              </div>
+              <strong id="debtSavingsRatio">0%</strong>
+              <small id="ratioStatus">Healthy leverage</small>
+            </article>
+          </div>
+
+          <div class="content-grid">
+            <!-- Record Loan Form -->
+            <section class="panel">
+              <div class="panel-header">
+                <div>
+                  <p class="eyebrow">Credit</p>
+                  <h2>Record a loan</h2>
+                </div>
+              </div>
+              <form id="loanForm" class="record-form">
+                <label class="field">
+                  <span>Lender Name</span>
+                  <input id="loanLender" type="text" placeholder="e.g. Centenary Bank, Coop Society" required>
+                </label>
+                <label class="field">
+                  <span>Principal (UGX)</span>
+                  <input id="loanPrincipal" type="number" min="10000" step="5000" placeholder="1000000" required>
+                </label>
+                <label class="field">
+                  <span>Interest Rate (% per year)</span>
+                  <input id="loanRate" type="number" min="0" max="100" step="0.1" placeholder="12" required>
+                </label>
+                <label class="field">
+                  <span>Issued Date</span>
+                  <input id="loanIssued" type="date" required>
+                </label>
+                <label class="field note-field">
+                  <span>Due Date</span>
+                  <input id="loanDue" type="date" required>
+                </label>
+                <button class="primary-button" type="submit">Record Loan</button>
+              </form>
+            </section>
+
+            <!-- Record Savings Form -->
+            <section class="panel">
+              <div class="panel-header">
+                <div>
+                  <p class="eyebrow">Savings</p>
+                  <h2>Add savings deposit</h2>
+                </div>
+              </div>
+              <form id="savingsForm" class="record-form">
+                <label class="field">
+                  <span>Amount (UGX)</span>
+                  <input id="saveAmount" type="number" min="1000" step="1000" placeholder="50000" required>
+                </label>
+                <label class="field">
+                  <span>Deposit Date</span>
+                  <input id="saveDate" type="date" required>
+                </label>
+                <label class="field note-field">
+                  <span>Purpose / Goal</span>
+                  <input id="savePurpose" type="text" placeholder="e.g. Quality Seeds purchase, tractor hire" required>
+                </label>
+                <button class="primary-button" type="submit">Deposit Savings</button>
+              </form>
+            </section>
+          </div>
+
+          <!-- Active Loans Ledger -->
+          <section class="panel records-panel">
+            <div class="panel-header">
+              <div>
+                <p class="eyebrow">Debts Ledger</p>
+                <h2>Active Loans</h2>
+              </div>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Lender</th>
+                    <th>Principal</th>
+                    <th>Rate</th>
+                    <th>Issued</th>
+                    <th>Due</th>
+                    <th>Repayment Progress</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="loansBody"></tbody>
+              </table>
+            </div>
+          </section>
+
+          <!-- Add Payment Dialog/Form -->
+          <div class="modal" id="paymentModal">
+            <div class="modal-content">
+              <h3>Make loan payment</h3>
+              <form id="paymentForm" class="record-form">
+                <input type="hidden" id="payLoanId">
+                <label class="field note-field">
+                  <span>Lender</span>
+                  <input type="text" id="payLenderName" readonly>
+                </label>
+                <label class="field">
+                  <span>Amount (UGX)</span>
+                  <input type="number" id="payAmount" min="1000" required>
+                </label>
+                <label class="field">
+                  <span>Date</span>
+                  <input type="date" id="payDate" required>
+                </label>
+                <div class="modal-actions">
+                  <button type="button" class="ghost-button" id="closePaymentModal">Cancel</button>
+                  <button type="submit" class="primary-button">Submit Payment</button>
+                </div>
+              </form>
+            </div>
+          </div>
+
+          <!-- Savings Ledger -->
+          <section class="panel records-panel">
+            <div class="panel-header">
+              <div>
+                <p class="eyebrow">Savings Ledger</p>
+                <h2>Saved reserves</h2>
+              </div>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Date</th>
+                    <th>Purpose</th>
+                    <th>Amount</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="savingsBody"></tbody>
+              </table>
+            </div>
+          </section>
+        </div>
+
+        <!-- VIEW 4: MARKET & WEATHER -->
+        <div id="marketView" class="tab-view">
+          <div class="district-selection-panel panel">
+            <label class="field compact">
+              <span>View Data for District</span>
+              <select id="marketDistrictSelect">
+                <option value="Kabale" selected>Kabale</option>
+                <option value="Mbarara">Mbarara</option>
+                <option value="Kasese">Kasese</option>
+                <option value="Masaka">Masaka</option>
+                <option value="Mbale">Mbale</option>
+                <option value="Gulu">Gulu</option>
+              </select>
+            </label>
+          </div>
+
+          <!-- Weather Forecast Card Row -->
+          <section class="panel weather-section">
+            <div class="panel-header">
+              <div>
+                <p class="eyebrow">Weather Forecast</p>
+                <h2 id="weatherDistrictHeader">Weather Forecast for Kabale</h2>
+              </div>
+            </div>
+            <div class="weather-grid" id="weatherGrid"></div>
+          </section>
+
+          <!-- Market Prices Table -->
+          <section class="panel records-panel">
+            <div class="panel-header">
+              <div>
+                <p class="eyebrow">Prices Index</p>
+                <h2 id="marketDistrictHeader">Real-Time Crop Prices in Kabale Markets</h2>
+              </div>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Crop</th>
+                    <th>Market Name</th>
+                    <th>Unit</th>
+                    <th>Market Price (UGX)</th>
+                    <th>Price Trend</th>
+                    <th>Last Updated</th>
+                  </tr>
+                </thead>
+                <tbody id="marketBody"></tbody>
+              </table>
+            </div>
+          </section>
+        </div>
+
+        <!-- VIEW 5: AI INSIGHTS -->
+        <div id="aiView" class="tab-view">
+          <div class="ai-hero-panel">
+            <div class="ai-hero-left">
+              <div class="circular-progress-wrap">
+                <svg class="circular-progress" viewBox="0 0 100 100">
+                  <circle class="bg-circle" cx="50" cy="50" r="40"></circle>
+                  <circle class="fill-circle" id="scoreCircle" cx="50" cy="50" r="40"></circle>
+                </svg>
+                <div class="score-display">
+                  <span id="scoreText">0</span>
+                  <small>Readiness</small>
+                </div>
+              </div>
+              <div class="score-meta">
+                <h2>Loan Readiness Rating</h2>
+                <p id="scoreLabel">Calculate score to see creditworthiness standing.</p>
+                <button class="primary-button" id="runDiagnosticBtn">Run AI Diagnostic</button>
+              </div>
+            </div>
+
+            <div class="ai-hero-right">
+              <h3>Diagnostic Scorecard Checks</h3>
+              <div class="checks-list" id="checksList">
+                <div class="check-row pending"><span>⌛ Net profit balance</span><span>Pending</span></div>
+                <div class="check-row pending"><span>⌛ Savings cushion size</span><span>Pending</span></div>
+                <div class="check-row pending"><span>⌛ Active land size registered</span><span>Pending</span></div>
+                <div class="check-row pending"><span>⌛ Active loan repayment history</span><span>Pending</span></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="content-grid double-column">
+            <section class="panel">
+              <div class="panel-header">
+                <div>
+                  <p class="eyebrow">AI Advisor</p>
+                  <h2>Strategic farm advice</h2>
+                </div>
+              </div>
+              <div class="recommendations-box" id="aiRecommendations">
+                <p class="empty-state visible">Run the AI Diagnostic to analyze your data and generate recommendations.</p>
+              </div>
+            </section>
+
+            <section class="panel">
+              <div class="panel-header">
+                <div>
+                  <p class="eyebrow">Crop Planner</p>
+                  <h2>Crop yields & price forecasting</h2>
+                </div>
+              </div>
+              <div class="crop-insights-box" id="cropInsights">
+                <p class="empty-state visible">Run the AI Diagnostic to fetch localized agricultural forecasts.</p>
+              </div>
+            </section>
+          </div>
+
+        </div>
+
+        <!-- VIEW 6: REPORTS -->
+        <div id="reportsView" class="tab-view">
+          <div class="report-actions-strip panel">
+            <button class="primary-button" id="printReportBtn">🖨️ Print Financial Statement (PDF)</button>
+          </div>
+
+          <!-- Printable Statement Container -->
+          <div class="printable-statement" id="statementContainer">
+            <div class="statement-header">
+              <div class="statement-logo">
+                <span class="brand-mark">AF</span>
+                <h2>AgriFinance AI Official Statement</h2>
+              </div>
+              <div class="statement-meta">
+                <p><strong>Report Date:</strong> <span id="rptDate">2026-07-16</span></p>
+                <p><strong>Status:</strong> Authenticated Record</p>
+              </div>
+            </div>
+
+            <hr class="divider">
+
+            <div class="statement-parties">
+              <div>
+                <h4>FARMER DETAILS</h4>
+                <p><strong>Name:</strong> <span id="rptName">Allan Ainebyona</span></p>
+                <p><strong>Phone:</strong> <span id="rptPhone">+256 701 234567</span></p>
+                <p><strong>Location:</strong> <span id="rptLocation">Kitumba, Kabale District</span></p>
+                <p><strong>Cooperative:</strong> <span id="rptCoop">Kabale Growers Coop</span></p>
+              </div>
+              <div>
+                <h4>FARM PROPERTIES</h4>
+                <p><strong>Total Registered Farms:</strong> <span id="rptFarmsCount">0 farms</span></p>
+                <p><strong>Total Acreage:</strong> <span id="rptAcreage">0 acres</span></p>
+                <p><strong>Main Agricultural Sector:</strong> <span id="rptMainCrop">Maize</span></p>
+              </div>
+            </div>
+
+            <h3 class="section-title">I. Cash Flow Statement Summary</h3>
+            <div class="reports-summary-cards">
+              <div class="rep-card">
+                <span>Gross Farm Income</span>
+                <strong id="rptIncomeTotal">UGX 0</strong>
+              </div>
+              <div class="rep-card">
+                <span>Operating Farm Costs</span>
+                <strong id="rptExpenseTotal">UGX 0</strong>
+              </div>
+              <div class="rep-card accent">
+                <span>Net Farm Surplus</span>
+                <strong id="rptNetProfit">UGX 0</strong>
+              </div>
+              <div class="rep-card">
+                <span>Operating Margin</span>
+                <strong id="rptMargin">0%</strong>
+              </div>
+            </div>
+
+            <h3 class="section-title">II. Financial Solvency & Credit Standing</h3>
+            <div class="reports-summary-cards">
+              <div class="rep-card">
+                <span>Active Debts</span>
+                <strong id="rptDebt">UGX 0</strong>
+              </div>
+              <div class="rep-card">
+                <span>Total Repayments</span>
+                <strong id="rptRepayments">UGX 0</strong>
+              </div>
+              <div class="rep-card">
+                <span>Savings Reserves</span>
+                <strong id="rptSavings">UGX 0</strong>
+              </div>
+              <div class="rep-card accent">
+                <span>Creditworthiness Score</span>
+                <strong id="rptScore">N/A</strong>
+              </div>
+            </div>
+
+            <h3 class="section-title">III. Recent Ledger Statements</h3>
+            <table class="report-table">
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Type</th>
+                  <th>Category</th>
+                  <th>Crop/Target</th>
+                  <th class="text-right">Amount (UGX)</th>
+                </tr>
+              </thead>
+              <tbody id="rptLedgerBody">
+                <tr>
+                  <td colspan="5" style="text-align: center;">No financial transactions registered.</td>
+                </tr>
+              </tbody>
+            </table>
+
+            <div class="statement-footer">
+              <p>Generated automatically via AgriFinance AI decision support tool. Verified for smallholder financial profiles in Uganda.</p>
+              <div class="signatures">
+                <div class="sig-line">
+                  <div class="sig-space"></div>
+                  <span>Farmer Signature</span>
+                </div>
+                <div class="sig-line">
+                  <div class="sig-space" style="border-bottom-style: dotted;"></div>
+                  <span>Verified Agent Seal</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <button class="chatbot-fab" id="chatbotFab" type="button" aria-expanded="false" aria-controls="chatbotPopup">
+      <span>💬</span>
+      <span>Ask AgriCoach</span>
+    </button>
+
+    <div class="chatbot-popup" id="chatbotPopup" aria-hidden="true">
+      <div class="chatbot-popup-header">
+        <div>
+          <p class="eyebrow">Farmer Help</p>
+          <h2>Ask AgriCoach</h2>
+        </div>
+        <button class="chatbot-close" id="chatbotCloseBtn" type="button" aria-label="Close chatbot">×</button>
+      </div>
+      <div class="chatbot-popup-body">
+        <div class="chat-messages" id="chatMessages">
+          <div class="chat-bubble bot">Ask me about profit, profit margin, income, expenses, savings, or loan readiness.</div>
+        </div>
+        <div class="chat-input-row">
+          <input id="chatInput" type="text" placeholder="Ask a question like: what is profit margin?" aria-label="Ask the chatbot">
+          <button class="primary-button" id="chatSendBtn" type="button">Send</button>
+        </div>
+      </div>
+    </div>
+
+    <script src="app.js"></script>
+  </body>
+</html>
+

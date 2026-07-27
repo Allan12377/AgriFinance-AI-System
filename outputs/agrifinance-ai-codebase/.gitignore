@@ -1,0 +1,38 @@
+# OS/editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Environment
+.env
+.env.local
+
+# Node
+node_modules/
+npm-debug.log*
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Flutter/Dart
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+build/
+
+# Generated app platforms can be recreated with flutter create
+apps/mobile/android/
+apps/mobile/ios/
+apps/mobile/linux/
+apps/mobile/macos/
+apps/mobile/windows/
+apps/mobile/web/
+
+# Local database files
+*.sqlite
+*.db
